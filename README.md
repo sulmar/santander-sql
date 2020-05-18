@@ -1,5 +1,10 @@
 # santander-sql
 
+
+## Normalizacja
+
+### Przed normalizacją
+
 ~~~ sql
 
 insert into #Orders values
@@ -12,6 +17,7 @@ insert into #Orders values
 
 ~~~
 
+### 1 postać normalna - 1NF
 ~~~ sql
 insert into #Orders_1NF values
 (1, 'High Quality Bike Store-Street', 'ul. Dworcowa 1', '01-242', 'Warszawa', 'Mazowieckie', '2020-04-05', 'Rower męski', 'UNIVEGA ALPINA', 27.5, 1, 2200),
@@ -22,6 +28,8 @@ insert into #Orders_1NF values
 (6, 'Trip Store', 'ul. Górska 12', '01-242', 'Warszawa', 'Mazowieckie', '2020-04-23', 'Rower męski', 'UNIVEGA ALPINA', 27.5, 4, 2200)
 ~~~
 
+
+### 2 postać normalna - 2NF
 ~~~ sql
 
 insert into #Customers_2NF values
@@ -48,9 +56,6 @@ insert into #Orders_2NF values
 (4, '4', 3, '2020-04-05'),
 (5, '5', 1, '2020-04-05' ),
 (6, '6', 1, '2020-04-23')
-
-
-
 
 insert into #OrderDetails_2NF values
 (1, 1, 1, 1, 2200),
