@@ -286,3 +286,62 @@ group by
  order by
 	OrderYear desc, OrderMonth desc, OrderDay desc
 ~~~
+
+
+
+~~~ sql
+
+
+select
+	year(soh.OrderDate) as OrderYear,
+	MONTH(soh.OrderDate) as OrderMonth,
+	day(soh.OrderDate) as OrderDay,
+	sum(soh.SubTotal)
+from sales.SalesOrderHeader as soh
+group by
+	year(soh.OrderDate), MONTH(soh.OrderDate), day(soh.OrderDate)
+
+union all
+
+select
+	year(soh.OrderDate) as OrderYear,
+	MONTH(soh.OrderDate) as OrderMonth,
+	null as OrderDay,
+	sum(soh.SubTotal)
+from sales.SalesOrderHeader as soh
+group by
+	year(soh.OrderDate), MONTH(soh.OrderDate)
+
+union all
+
+select
+	year(soh.OrderDate) as OrderYear,
+	null as OrderMonth,
+	null as OrderDay,
+	sum(soh.SubTotal)
+from sales.SalesOrderHeader as soh
+group by
+	year(soh.OrderDate)
+
+union all
+
+select
+	null as OrderYear,
+	null as OrderMonth,
+	null as OrderDay,
+	sum(soh.SubTotal)
+from sales.SalesOrderHeader as soh
+
+
+select
+	year(soh.OrderDate) as OrderYear,
+	MONTH(soh.OrderDate) as OrderMonth,
+	day(soh.OrderDate) as OrderDay,
+	sum(soh.SubTotal)
+from sales.SalesOrderHeader as soh
+group by
+
+	rollup(year(soh.OrderDate),	MONTH(soh.OrderDate), day(soh.OrderDate))
+
+
+~~~
