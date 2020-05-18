@@ -362,3 +362,34 @@ alter table #OrderDetails_2NF
 	add TotalAmount as (Quantity * UnitPrice) persisted
 ~~~
 
+### Przy tworzeniu tabeli
+
+~~~ sql
+create schema Santander;
+
+create table Santander.OrderDetails (
+	OrderDetailId int, -- PK
+	OrderId int, -- FK
+	ProductId int, -- FK
+	Quantity int,
+	UnitPrice decimal,
+	Tax decimal,
+	Total AS (Quantity * UnitPrice) 
+)
+~~~
+
+Użycie kolumny
+~~~ sql
+select
+	YEAR(o.OrderDate) as OrderYear,
+	MONTH(o.OrderDate) as OrderMonth,
+	DAY(o.OrderDate) as OrderDay,
+	SUM(od.TotalAmount) as Total
+  from #Orders_2NF as o
+	 inner join #OrderDetails_2NF as od
+				on o.OrderId = od.OrderId
+group by
+ ROLLUP(YEAR(o.OrderDate), MONTH(o.OrderDate), 	DAY(o.OrderDate) )
+ order by
+	OrderYear desc, OrderMonth desc, OrderDay desc
+~~~
