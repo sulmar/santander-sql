@@ -378,7 +378,8 @@ create table Santander.OrderDetails (
 )
 ~~~
 
-Użycie kolumny
+
+
 ~~~ sql
 select
 	YEAR(o.OrderDate) as OrderYear,
@@ -394,6 +395,39 @@ group by
 	OrderYear desc, OrderMonth desc, OrderDay desc
 ~~~
 
+### Wybór 
+
+#### Na podstawie kolumny
+
+~~~ sql
+select 
+	PersonType,
+	CASE PersonType
+		WHEN 'EM' THEN 'Employee'
+		WHEN 'IN' THEN 'Invidual Customer'
+		WHEN 'VC' THEN 'Vendor Customer'
+		ELSE 'Other'
+	END AS PeronTypeName,
+	FirstName,
+	LastName
+ from Person.Person
+ ~~~
+
+#### Na podstawie wyrażenia
+~~~ sql
+ select
+	[Name],
+	ListPrice,
+	CASE
+		WHEN ListPrice = 0 then 'Gratis'
+		WHEN ListPrice < 100 then '<100'
+		WHEN ListPrice >= 100 and ListPrice < 500 then '100..500'
+		WHEN ListPrice >= 500 and ListPrice < 1000 then '500..1000'
+		ELSE '>=1000'
+	END AS PriceRange
+from 
+	Production.Product
+~~~
 
 ### łączenie tekstu (konkatenacja)
 
