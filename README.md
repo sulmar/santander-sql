@@ -419,3 +419,29 @@ select value from string_split(@query, ',')
 SELECT * FROM Sales.SalesOrderHeader
 WHERE SalesOrderID in ( select value from string_split(@query, ',') )
 ~~~ 
+
+### Predykaty
+~~~ sql
+SELECT * FROM Sales.SalesOrderHeader
+WHERE SalesOrderID >= 43660 and SalesOrderID <= 43670
+~~~
+
+~~~ sql
+SELECT * FROM Sales.SalesOrderHeader
+WHERE SalesOrderID BETWEEN 43660 AND 43670
+~~~ 
+
+~~~ sql
+SELECT * FROM Person.Person
+WHERE LastName LIKE '[^A-D]%'
+~~~ 
+
+~~~ sql
+SELECT * FROM Sales.SalesOrderHeader
+WHERE SalesOrderID = 43660 or SalesOrderID = 43670 or SalesOrderID = 43665
+~~~
+
+~~~ sql
+SELECT * FROM Sales.SalesOrderHeader
+WHERE SalesOrderID in ( 43660, 43670, 43665)
+~~~
