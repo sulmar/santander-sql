@@ -345,3 +345,20 @@ group by
 
 
 ~~~
+
+
+## Kolumny wyliczone (computed)
+
+
+### Wyliczane w locie
+~~~ sql
+alter table #OrderDetails_2NF
+	add TotalAmount as (Quantity * UnitPrice)
+~~~
+
+### Utrwalone w bazie
+~~~ sql
+alter table #OrderDetails_2NF
+	add TotalAmount as (Quantity * UnitPrice) persisted
+~~~
+
