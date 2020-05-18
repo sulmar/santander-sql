@@ -37,6 +37,8 @@ insert into #Orders_1NF values
 
 
 ### 2 postać normalna - 2NF
+
+Każda tabela powinna przechowywać dane dotyczące tylko konkretnej klasy obiektów.
 ~~~ sql
 
 insert into #Customers_2NF values
