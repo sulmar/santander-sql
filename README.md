@@ -1,4 +1,4 @@
-# santander-sql
+# SQL dla programistów .NET
 
 
 ## Normalizacja
