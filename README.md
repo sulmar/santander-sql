@@ -194,3 +194,95 @@ select
 group by
 	o.CustomerId, Customer
 ~~~
+
+
+## GROUPING SETS
+
+~~~ sql
+select
+	YEAR(o.OrderDate) as OrderYear,
+	o.CustomerId,
+	SUM(UnitPrice * Quantity) as Total
+from
+	#Orders_2NF as o
+		inner join #OrderDetails_2NF as od
+			on o.OrderId = od.OrderId
+group by
+	GROUPING SETS
+	(
+		(YEAR(o.OrderDate), o.CustomerId),
+		(o.CustomerId),
+		(YEAR(o.OrderDate)),
+		()
+	)
+order by OrderYear, CustomerId
+~~~
+
+### CUBE
+~~~ sql
+select
+	YEAR(o.OrderDate) as OrderYear,
+	o.CustomerId,
+	SUM(UnitPrice * Quantity) as Total
+from
+	#Orders_2NF as o
+		inner join #OrderDetails_2NF as od
+			on o.OrderId = od.OrderId
+group by
+	CUBE(YEAR(o.OrderDate), o.CustomerId)
+
+order by OrderYear, CustomerId
+~~~
+
+~~~
+CUBE (a, b, c) -> GROUPING SETS ( (a,b,c), ), (a,b), (a,c), (b,c), (b), (c), ())
+~~~
+
+~~~ sql
+select
+	YEAR(o.OrderDate) as OrderYear,
+	MONTH(o.OrderDate) as OrderMonth,
+	DAY(o.OrderDate) as OrderDay,
+	SUM(od.Quantity * od.UnitPrice) as Total
+  from #Orders_2NF as o
+	 inner join #OrderDetails_2NF as od
+				on o.OrderId = od.OrderId
+group by
+	YEAR(o.OrderDate),
+	MONTH(o.OrderDate),
+	DAY(o.OrderDate) 
+
+select
+	YEAR(o.OrderDate) as OrderYear,
+	MONTH(o.OrderDate) as OrderMonth,
+	DAY(o.OrderDate) as OrderDay,
+	SUM(od.Quantity * od.UnitPrice) as Total
+  from #Orders_2NF as o
+	 inner join #OrderDetails_2NF as od
+				on o.OrderId = od.OrderId
+group by
+GROUPING SETS
+(
+	(YEAR(o.OrderDate), MONTH(o.OrderDate), DAY(o.OrderDate)),
+	(YEAR(o.OrderDate), MONTH(o.OrderDate)),
+	(YEAR(o.OrderDate)),
+	()
+)
+~~~
+
+
+### ROLLUP
+~~~ sql
+select
+	YEAR(o.OrderDate) as OrderYear,
+	MONTH(o.OrderDate) as OrderMonth,
+	DAY(o.OrderDate) as OrderDay,
+	SUM(od.Quantity * od.UnitPrice) as Total
+  from #Orders_2NF as o
+	 inner join #OrderDetails_2NF as od
+				on o.OrderId = od.OrderId
+group by
+ ROLLUP(YEAR(o.OrderDate), MONTH(o.OrderDate), 	DAY(o.OrderDate) )
+ order by
+	OrderYear desc, OrderMonth desc, OrderDay desc
+~~~
