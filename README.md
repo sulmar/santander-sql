@@ -26,6 +26,26 @@ tabela (encja) jest w pierwszej postaci normalnej 1NF kiedy:
 - dane są atomowe
 
 ~~~ sql
+create table #Orders_1NF
+(
+	OrderId int,
+	OrderNumber nvarchar(10),
+	Customer nvarchar(100),
+	[Street] nvarchar(100),
+	[PostCode] char(6),
+	[City] nvarchar(100),
+	[Region] nvarchar(100),
+	OrderDate datetime2,
+	[ProductType] nvarchar(100),
+	[ProductName] nvarchar(100),
+	[Size] float,
+	Quantity int,
+	UnitPrice decimal
+)
+~~~
+
+- Przykładowe dane
+~~~ sql
 insert into #Orders_1NF values
 (1, 'High Quality Bike Store-Street', 'ul. Dworcowa 1', '01-242', 'Warszawa', 'Mazowieckie', '2020-04-05', 'Rower męski', 'UNIVEGA ALPINA', 27.5, 1, 2200),
 (2, 'Speed Cycles', 'ul. Rowerowa 31', '85-142', 'Bydgoszcz', 'Kujawsko-Pomorskie', '2020-02-12', 'Rower damski', 'UNIVEGA GEO LIGHT NINE', 28.0, 1, 4400),
