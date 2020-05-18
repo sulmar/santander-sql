@@ -143,3 +143,54 @@ insert into #OrderDetails_2NF values
 
 
 ~~~
+
+
+### Group by i Union
+
+~~~ sql
+select 
+	year(o.OrderDate) AS OrderYear,
+	o.CustomerId,
+	c.Customer,
+	SUM(UnitPrice * Quantity) as Total,
+	COUNT(*) as Number
+ from #Orders_2NF as o
+	inner join #OrderDetails_2NF as od
+		on o.OrderId = od.OrderId
+	inner join #Customers_2NF as c
+		on c.CustomerId = o.CustomerId
+group by
+	YEAR(o.OrderDate), o.CustomerId, c.Customer
+
+union all
+
+select 
+	year(o.OrderDate) AS OrderYear,
+	null as CustomerId,
+	null as Customer,
+	SUM(UnitPrice * Quantity) as Total,
+	COUNT(*) as Number
+ from #Orders_2NF as o
+	inner join #OrderDetails_2NF as od
+		on o.OrderId = od.OrderId
+	inner join #Customers_2NF as c
+		on c.CustomerId = o.CustomerId
+group by
+	YEAR(o.OrderDate)
+
+union all
+
+select 
+	null AS OrderYear,
+	o.CustomerId,
+	Customer,
+	SUM(UnitPrice * Quantity) as Total,
+	COUNT(*) as Number
+ from #Orders_2NF as o
+	inner join #OrderDetails_2NF as od
+		on o.OrderId = od.OrderId
+	inner join #Customers_2NF as c
+		on c.CustomerId = o.CustomerId
+group by
+	o.CustomerId, Customer
+~~~
