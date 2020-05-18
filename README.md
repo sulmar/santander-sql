@@ -393,3 +393,15 @@ group by
  order by
 	OrderYear desc, OrderMonth desc, OrderDay desc
 ~~~
+
+
+### rozdzielenie tekstu (*string_split*)
+~~~ sql
+declare @query varchar(max)
+set @query = '43660,43670,43665'
+
+select value from string_split(@query, ',')
+
+SELECT * FROM Sales.SalesOrderHeader
+WHERE SalesOrderID in ( select value from string_split(@query, ',') )
+~~~ 
