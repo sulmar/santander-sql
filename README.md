@@ -39,6 +39,51 @@ insert into #Orders_1NF values
 ### 2 postać normalna - 2NF
 
 Każda tabela powinna przechowywać dane dotyczące tylko konkretnej klasy obiektów.
+
+~~~ sql
+create table #Customers_2NF 
+(
+	CustomerId int,
+	[Street] nvarchar(100),
+	Customer nvarchar(100),
+	[PostCode] char(6),
+	[City] nvarchar(100),
+	[Region] nvarchar(100)
+)
+
+
+create table #ProductTypes_2NF
+(
+	ProductTypeId int, -- PK (Primary Key)
+	[Name] nvarchar(100)
+)
+
+create table #Products_2NF (
+	ProductId int, -- PK (Primary Key)
+	ProductTypeId int, -- FK (Foreign Key)
+	[ProductName] nvarchar(100),
+	[Size] float,
+	ListPrice decimal
+)
+
+create table #Orders_2NF (
+	OrderId int,
+	OrderNumber nvarchar(10),
+	CustomerId int,	 -- FK
+	OrderDate datetime2
+)
+
+create table #OrderDetails_2NF (
+	OrderDetailId int, -- PK
+	OrderId int, -- FK
+	ProductId int, -- FK
+	Quanity int,
+	UnitPrice decimal
+
+)
+~~~
+
+- Przykładowe dane
 ~~~ sql
 
 insert into #Customers_2NF values
