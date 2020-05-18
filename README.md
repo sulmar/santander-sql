@@ -93,14 +93,16 @@ create table #Orders_2NF (
 	OrderDate datetime2
 )
 
+
 create table #OrderDetails_2NF (
 	OrderDetailId int, -- PK
 	OrderId int, -- FK
 	ProductId int, -- FK
-	Quanity int,
+	Quantity int,
 	UnitPrice decimal
 
 )
+
 ~~~
 
 - Przykładowe dane
