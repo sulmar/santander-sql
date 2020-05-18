@@ -18,6 +18,13 @@ insert into #Orders values
 ~~~
 
 ### 1 postać normalna - 1NF
+
+tabela (encja) jest w pierwszej postaci normalnej 1NF kiedy:
+- wiersz przechowuje informacje o pojedynczym obiekcie
+- nie zawiera kolekcji
+- posiada klucz główny (kolumnę lub grupę kolumn jednoznacznie identyfikujących go w zbiorze)
+- dane są atomowe
+
 ~~~ sql
 insert into #Orders_1NF values
 (1, 'High Quality Bike Store-Street', 'ul. Dworcowa 1', '01-242', 'Warszawa', 'Mazowieckie', '2020-04-05', 'Rower męski', 'UNIVEGA ALPINA', 27.5, 1, 2200),
