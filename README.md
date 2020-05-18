@@ -395,6 +395,20 @@ group by
 ~~~
 
 
+### łączenie tekstu (konkatenacja)
+
+~~~ sql
+SELECT
+FirstName,
+MiddleName,
+LastName,
+FirstName + isnull(MiddleName, '') + LastName as FullName,
+CONCAT(FirstName, MiddleName, LastName) as FullNameConcat
+FROM	Person.Person
+
+~~~
+
+
 ### rozdzielenie tekstu (*string_split*)
 ~~~ sql
 declare @query varchar(max)
