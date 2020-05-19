@@ -2,6 +2,7 @@
 using Santander.SQL.Fakers;
 using Santander.SQL.IServices;
 using Santander.SQL.Models;
+using Santander.SQL.Models.SearchCriterias;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -15,7 +16,34 @@ namespace Santander.SQL.ConsoleClient
     {
         static void Main(string[] args)
         {
-            AddAccountOperationTest();
+            GetAccountOperationsTest();
+
+            // AddAccountOperationTest();
+        }
+
+        private static void GetAccountOperationsTest()
+        {
+            string connectionString = GetConnectionString("SULMAR-PC", "AdventureWorks", applicationName: "Santander");
+
+            SqlConnection connection = new SqlConnection(connectionString);
+
+            IAccountOperationService accountOperationService = new DbAccountOperationService(connection);
+
+            AccountOperationSearchCriteria criteria = new AccountOperationSearchCriteria
+            {
+                Account = "12348",
+                From = DateTime.Parse("2019-05-01"),
+                To = DateTime.Parse("2019-12-01"),
+            };
+
+            var accountOperations = accountOperationService.Get(criteria);
+
+            foreach (var operation in accountOperations)
+            {
+                Console.WriteLine(operation.Account);
+            }
+
+
         }
 
         private static void AddAccountOperationTest()

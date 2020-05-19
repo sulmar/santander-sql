@@ -12,6 +12,6 @@ namespace Santander.SQL.IServices
     {
         void Add(AccountOperation accountOperation);
 
-        IEnumerable<AccountOperation> Get(AccountOpeationSearchCriteria searchCriteria);
+        IEnumerable<AccountOperation> Get(AccountOperationSearchCriteria searchCriteria);
     }
 }

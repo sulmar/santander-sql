@@ -25,7 +25,7 @@ namespace Santander.SQL.DbServices
             {
                 case OperationStatus.OK: return "OK";
                 case OperationStatus.KO: return "KO";
-                case OperationStatus.Exception: return "EX";
+                case OperationStatus.EX: return "EX";
 
                 default: throw new NotSupportedException(operationStatus.ToString());
             }
@@ -62,9 +62,66 @@ namespace Santander.SQL.DbServices
             connection.Close();
         }
 
-        public IEnumerable<AccountOperation> Get(AccountOpeationSearchCriteria searchCriteria)
+
+        // FastMember
+        //public void BulkCopy(IEnumerable<AccountOperation> operations)
+        //{
+        //    using (var bcp = new SqlBulkCopy(connection))
+        //    using (var reader = ObjectReader.Create(operations, "Id", "Account", "OperationDate"))
+        //    {
+        //        bcp.DestinationTableName = "Santander.AccountOperations";
+        //        bcp.BatchSize = 500;
+        //        bcp.WriteToServer(reader);
+        //    }
+        //}
+
+        public IEnumerable<AccountOperation> Get(AccountOperationSearchCriteria searchCriteria)
         {
-            throw new NotImplementedException();
+            string sql = "SELECT AccountOperationId, Account, OperationDate, OperationTypeId, OperationStatus FROM Santander.AccountOperations WHERE ";
+
+            if (!string.IsNullOrEmpty(searchCriteria.Account))
+            {
+                sql += "Account like @Account + '%'";
+            }
+
+            if (searchCriteria.From.HasValue && searchCriteria.To.HasValue)
+            {
+                sql += "AND OperationDate BETWEEN @From AND @To";
+            }
+
+            SqlCommand command = new SqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@Account", searchCriteria.Account);
+            command.Parameters.AddWithValue("@From", searchCriteria.From);
+            command.Parameters.AddWithValue("@To", searchCriteria.To);
+
+            connection.Open();
+
+            SqlDataReader reader = command.ExecuteReader();
+
+            ICollection<AccountOperation> accountOperations = new List<AccountOperation>();
+            
+            while(reader.Read())
+            {
+                yield return Map(reader);
+            }
+
+            connection.Close();
+
+        }
+
+        private static AccountOperation Map(SqlDataReader reader)
+        {
+            AccountOperation accountOperation = new AccountOperation();
+            accountOperation.Id = reader.GetInt32(0);
+            accountOperation.Account = reader.GetString(1);
+            accountOperation.OperationDate = reader.GetDateTime(2);
+
+            int operationTypeId = reader.GetInt32(3);
+            accountOperation.OperationType = new OperationType { Id = operationTypeId };
+
+            accountOperation.OperationStatus = (OperationStatus)Enum.Parse(typeof(OperationStatus), reader.GetString(4));
+
+            return accountOperation;
         }
     }
 }

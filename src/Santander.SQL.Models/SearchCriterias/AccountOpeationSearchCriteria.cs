@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Santander.SQL.Models.SearchCriterias
 {
-    public class AccountOpeationSearchCriteria : Base
+    public class AccountOperationSearchCriteria : Base
     {
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
+        public DateTime? From { get; set; }
+        public DateTime? To { get; set; }
         public string Account { get; set; }
         public OperationStatus? OperationStatus { get; set; }
     }
