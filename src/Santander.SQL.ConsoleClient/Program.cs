@@ -6,6 +6,7 @@ using Santander.SQL.Models.SearchCriterias;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,9 +17,20 @@ namespace Santander.SQL.ConsoleClient
     {
         static void Main(string[] args)
         {
+           // AddAccountOperationTest();
+
+            var stopwatch = Stopwatch.StartNew();
+
             GetAccountOperationsTest();
 
-            // AddAccountOperationTest();
+            stopwatch.Stop();
+            Console.WriteLine("GetAccountOperationsTest " + stopwatch.ElapsedMilliseconds + "ms");
+
+
+            Console.WriteLine("Press any key to exit.");
+            Console.ReadKey();
+
+            
         }
 
         private static void GetAccountOperationsTest()
@@ -40,7 +52,7 @@ namespace Santander.SQL.ConsoleClient
 
             foreach (var operation in accountOperations)
             {
-                Console.WriteLine(operation.Account);
+                // Console.WriteLine(operation.Account);
             }
 
 
@@ -57,7 +69,7 @@ namespace Santander.SQL.ConsoleClient
 
             AccountOperationFaker accountOperationFaker = new AccountOperationFaker();
 
-            var accountOperations = accountOperationFaker.GenerateLazy(10_000);
+            var accountOperations = accountOperationFaker.GenerateLazy(100_000);
 
             foreach (var accountOperation in accountOperations)
             {
