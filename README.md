@@ -479,3 +479,6 @@ WHERE SalesOrderID = 43660 or SalesOrderID = 43670 or SalesOrderID = 43665
 SELECT * FROM Sales.SalesOrderHeader
 WHERE SalesOrderID in ( 43660, 43670, 43665)
 ~~~
+
+## Partycjonowanie danych
+https://www.cathrinewilhelmsen.net/2015/04/12/table-partitioning-in-sql-server/
