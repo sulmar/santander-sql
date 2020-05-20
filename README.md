@@ -480,5 +480,9 @@ SELECT * FROM Sales.SalesOrderHeader
 WHERE SalesOrderID in ( 43660, 43670, 43665)
 ~~~
 
+
+## Wydajność SqlBulkCopy
+https://www.sqlbi.com/wp-content/uploads/SqlBulkCopy-Performance-1.0.pdf
+
 ## Partycjonowanie danych
 https://www.cathrinewilhelmsen.net/2015/04/12/table-partitioning-in-sql-server/
