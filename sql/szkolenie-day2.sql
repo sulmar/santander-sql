@@ -70,6 +70,11 @@ select top 100 * from Santander.AccountOperations
 -- delete from Santander.AccountOperations
 
 
+UPDATE  Santander.AccountOperations
+ SET OperationStatus = 'KO' where AccountOperationId = 22
+
+
+
 SELECT 
 	AccountOperationId, 
 	Account,
