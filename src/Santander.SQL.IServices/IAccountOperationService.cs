@@ -1,10 +1,6 @@
 ﻿using Santander.SQL.Models;
 using Santander.SQL.Models.SearchCriterias;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Santander.SQL.IServices
 {
@@ -13,5 +9,11 @@ namespace Santander.SQL.IServices
         void Add(AccountOperation accountOperation);
 
         IEnumerable<AccountOperation> Get(AccountOperationSearchCriteria searchCriteria);
+
+        AccountOperation Get(int id);
+
+        void Update(AccountOperation accountOperation);
+
+        void Remove(int id);
     }
 }

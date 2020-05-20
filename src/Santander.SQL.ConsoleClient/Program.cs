@@ -21,7 +21,13 @@ namespace Santander.SQL.ConsoleClient
 
             var stopwatch = Stopwatch.StartNew();
 
-            GetAccountOperationsTest();
+           // RemoveAccountOperationTest();
+
+            // UpdateAccountOperationTest();
+
+            GetAccountOperationTest();
+
+            // GetAccountOperationsTest();
 
             stopwatch.Stop();
             Console.WriteLine("GetAccountOperationsTest " + stopwatch.ElapsedMilliseconds + "ms");
@@ -31,6 +37,47 @@ namespace Santander.SQL.ConsoleClient
             Console.ReadKey();
 
             
+        }
+
+        private static void RemoveAccountOperationTest()
+        {
+            IAccountOperationService accountOperationService = GetService();
+
+            accountOperationService.Remove(20);
+        }
+
+        private static void UpdateAccountOperationTest()
+        {
+            IAccountOperationService accountOperationService = GetService();
+
+            AccountOperation accountOperation = accountOperationService.Get(22);
+
+            accountOperation.OperationStatus = OperationStatus.EX;
+
+            accountOperation.Id = 19;
+
+            accountOperationService.Update(accountOperation);
+        }
+
+        private static IAccountOperationService GetService()
+        {
+            string connectionString = GetConnectionString("SULMAR-PC", "AdventureWorks", applicationName: "Santander");
+
+            SqlConnection connection = new SqlConnection(connectionString);
+
+            IAccountOperationService accountOperationService = new DbAccountOperationService(connection);
+
+            return accountOperationService;
+        }
+
+        private static void GetAccountOperationTest()
+        {
+            IAccountOperationService accountOperationService = GetService();
+
+            AccountOperation accountOperation = accountOperationService.Get(22);
+
+            Console.WriteLine(accountOperation.Account);
+
         }
 
         private static void GetAccountOperationsTest()

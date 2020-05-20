@@ -41,10 +41,7 @@ namespace Santander.SQL.DbServices
             this.connection = connection;
         }
 
-        public void Remove(int id)
-        {
-            throw new NotImplementedException(); 
-        }
+       
 
         public void Add(AccountOperation accountOperation)
         {
@@ -117,11 +114,92 @@ namespace Santander.SQL.DbServices
             accountOperation.OperationDate = reader.GetDateTime(2);
 
             int operationTypeId = reader.GetInt32(3);
-            accountOperation.OperationType = new OperationType { Id = operationTypeId };
+            accountOperation.OperationType = new OperationType { Id = operationTypeId, Name = reader.GetString(5) };
 
-            accountOperation.OperationStatus = (OperationStatus)Enum.Parse(typeof(OperationStatus), reader.GetString(4));
+            if (!reader.IsDBNull(4))
+            {
+                accountOperation.OperationStatus = (OperationStatus)Enum.Parse(typeof(OperationStatus), reader.GetString(4));
+            }
 
             return accountOperation;
+        }
+
+        public AccountOperation Get(int id)
+        {
+            string sql = "SELECT AccountOperationId, Account, OperationDate, Santander.AccountOperations.OperationTypeId, OperationStatus, [Name] FROM Santander.AccountOperations INNER JOIN Santander.OperationTypes ON Santander.AccountOperations.OperationTypeId = Santander.OperationTypes.OperationTypeId WHERE AccountOperationId = @AccountOperationId";
+
+            SqlCommand command = new SqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@AccountOperationId", id);
+
+            connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+
+            AccountOperation accountOperation = null;
+
+            if (reader.Read())
+            {
+                accountOperation = Map(reader);
+            }
+
+            connection.Close();
+
+            return accountOperation;
+        }
+
+        public void Update(AccountOperation accountOperation)
+        {
+            string sql = "UPDATE Santander.AccountOperations SET Account = @Account, OperationDate = @OperationDate, OperationTypeId = @OperationTypeId, OperationStatus = @OperationStatus WHERE AccountOperationId = @AccountOperationId";
+
+            SqlCommand command = new SqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@AccountOperationId", accountOperation.Id);
+            command.Parameters.AddWithValue("@Account", accountOperation.Account);
+            command.Parameters.AddWithValue("@OperationDate", accountOperation.OperationDate);
+            command.Parameters.AddWithValue("@OperationTypeId", accountOperation.OperationType.Id);
+            command.Parameters.AddWithValue("@OperationStatus", Map(accountOperation.OperationStatus));
+
+            connection.Open();
+            int rowsAffected = command.ExecuteNonQuery();
+            connection.Close();
+
+            if (rowsAffected == 0)
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
+        public bool TryUpdate(AccountOperation accountOperation)
+        {
+            string sql = "UPDATE Santander.AccountOperations SET Account = @Account, OperationDate = @OperationDate, OperationTypeId = @OperationTypeId, OperationStatus = @OperationStatus WHERE AccountOperationId = @AccountOperationId";
+
+            SqlCommand command = new SqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@AccountOperationId", accountOperation.Id);
+            command.Parameters.AddWithValue("@Account", accountOperation.Account);
+            command.Parameters.AddWithValue("@OperationDate", accountOperation.OperationDate);
+            command.Parameters.AddWithValue("@OperationTypeId", accountOperation.OperationType.Id);
+            command.Parameters.AddWithValue("@OperationStatus", Map(accountOperation.OperationStatus));
+
+            connection.Open();
+            int rowsAffected = command.ExecuteNonQuery();
+            connection.Close();
+
+            return rowsAffected>0;
+        }
+
+        public void Remove(int id)
+        {
+            string sql = "DELETE FROM Santander.AccountOperations WHERE AccountOperationId = @AccountOperationId";
+
+            SqlCommand command = new SqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@AccountOperationId", id);
+
+            connection.Open();
+            int rowsAffected = command.ExecuteNonQuery();
+            connection.Close();
+
+            if (rowsAffected == 0)
+            {
+                throw new InvalidOperationException();
+            }
         }
     }
 }
