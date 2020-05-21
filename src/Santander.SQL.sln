@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Santander.SQL.DbServices", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Santander.SQL.Fakers", "Santander.SQL.Fakers\Santander.SQL.Fakers.csproj", "{AEE615D5-E0A1-4A7A-B475-203666A51952}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Santander.SQL.EFServices", "Santander.SQL.EFServices\Santander.SQL.EFServices.csproj", "{5554FC11-312A-4CE9-9855-901511B623BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{AEE615D5-E0A1-4A7A-B475-203666A51952}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEE615D5-E0A1-4A7A-B475-203666A51952}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEE615D5-E0A1-4A7A-B475-203666A51952}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5554FC11-312A-4CE9-9855-901511B623BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5554FC11-312A-4CE9-9855-901511B623BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5554FC11-312A-4CE9-9855-901511B623BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5554FC11-312A-4CE9-9855-901511B623BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

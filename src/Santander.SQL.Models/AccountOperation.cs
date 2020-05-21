@@ -11,6 +11,7 @@ namespace Santander.SQL.Models
         public string Account { get; set; }
         public DateTime OperationDate { get; set; }
         public OperationType OperationType { get; set; }
+
         public OperationStatus OperationStatus { get; set; }
 
         public AccountOperation()

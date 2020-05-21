@@ -1,4 +1,5 @@
 ﻿using Santander.SQL.DbServices;
+using Santander.SQL.EFServices;
 using Santander.SQL.Fakers;
 using Santander.SQL.IServices;
 using Santander.SQL.Models;
@@ -21,11 +22,17 @@ namespace Santander.SQL.ConsoleClient
 
             var stopwatch = Stopwatch.StartNew();
 
-           // RemoveAccountOperationTest();
+            AddOperationTypeTest();
+
+            UpdateOperationTypeTest();
+
+            // TestEFOperationTypeService();
+
+            // RemoveAccountOperationTest();
 
             // UpdateAccountOperationTest();
 
-            GetAccountOperationTest();
+            // GetAccountOperationTest();
 
             // GetAccountOperationsTest();
 
@@ -39,6 +46,49 @@ namespace Santander.SQL.ConsoleClient
             
         }
 
+        private static void AddOperationTypeTest()
+        {
+            string connectionString = GetConnectionString("SULMAR-PC", "AdventureWorks", applicationName: "Santander");
+
+            SantanderContext context = new SantanderContext(connectionString);
+
+            IOperationTypeService operationTypeService = new EFOperationTypeService(context);
+
+            OperationType operationType = new OperationType { Id = 4, Name = "Operacja 4" };
+            operationTypeService.Add(operationType);
+
+
+        }
+
+        private static void TestEFOperationTypeService()
+        {
+            string connectionString = GetConnectionString("SULMAR-PC", "AdventureWorks", applicationName: "Santander");
+
+            SantanderContext context = new SantanderContext(connectionString);
+
+            IOperationTypeService operationTypeService = new EFOperationTypeService(context);
+
+            OperationType operationType = operationTypeService.Get(1);
+
+        }
+
+        private static void UpdateOperationTypeTest()
+        {
+            string connectionString = GetConnectionString("SULMAR-PC", "AdventureWorks", applicationName: "Santander");
+
+            SantanderContext context = new SantanderContext(connectionString);
+
+            IOperationTypeService operationTypeService = new EFOperationTypeService(context);
+
+            OperationType operationType = operationTypeService.Get(1);
+
+            operationType.Name = "Operacja 4";
+
+            operationTypeService.Update(operationType);
+
+        }
+
+
         private static void RemoveAccountOperationTest()
         {
             IAccountOperationService accountOperationService = GetService();
@@ -48,7 +98,7 @@ namespace Santander.SQL.ConsoleClient
 
         private static void UpdateAccountOperationTest()
         {
-            IAccountOperationService accountOperationService = GetService();
+            IAccountOperationService accountOperationService = GetEFService();
 
             AccountOperation accountOperation = accountOperationService.Get(22);
 
@@ -57,6 +107,17 @@ namespace Santander.SQL.ConsoleClient
             accountOperation.Id = 19;
 
             accountOperationService.Update(accountOperation);
+        }
+
+        private static IAccountOperationService GetEFService()
+        {
+            string connectionString = GetConnectionString("SULMAR-PC", "AdventureWorks", applicationName: "Santander");
+
+            SantanderContext context = new SantanderContext(connectionString);
+            IAccountOperationService accountOperationService = new EFAccountOperationService(context);
+
+            return accountOperationService;
+
         }
 
         private static IAccountOperationService GetService()

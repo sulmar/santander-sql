@@ -5,20 +5,18 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FDF73CDC-D525-4FC6-BCCF-06989B4F1860}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Santander.SQL.ConsoleClient</RootNamespace>
-    <AssemblyName>Santander.SQL.ConsoleClient</AssemblyName>
+    <ProjectGuid>{5554FC11-312A-4CE9-9855-901511B623BE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Santander.SQL.EFServices</RootNamespace>
+    <AssemblyName>Santander.SQL.EFServices</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -28,7 +26,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -37,9 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bogus, Version=29.0.2.0, Culture=neutral, PublicKeyToken=fa1bb3f3f218129a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bogus.29.0.2\lib\net40\Bogus.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -49,6 +43,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -57,34 +53,67 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="AccountOperations.cs">
+      <DependentUpon>DesignerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DesignerModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DesignerModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DesignerModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DesignerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DesignerModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DesignerModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="EFAccountOperationService.cs" />
+    <Compile Include="OperationTypes.cs">
+      <DependentUpon>DesignerModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SantanderContext.cs" />
+    <Compile Include="SantanderModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EntityDeploy Include="DesignerModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DesignerModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="DesignerModel.edmx.diagram">
+      <DependentUpon>DesignerModel.edmx</DependentUpon>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Santander.SQL.DbServices\Santander.SQL.DbServices.csproj">
-      <Project>{8c8a7712-98aa-4031-83a2-494d841fc07b}</Project>
-      <Name>Santander.SQL.DbServices</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Santander.SQL.EFServices\Santander.SQL.EFServices.csproj">
-      <Project>{5554fc11-312a-4ce9-9855-901511b623be}</Project>
-      <Name>Santander.SQL.EFServices</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Santander.SQL.Fakers\Santander.SQL.Fakers.csproj">
-      <Project>{aee615d5-e0a1-4a7a-b475-203666a51952}</Project>
-      <Name>Santander.SQL.Fakers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Santander.SQL.IServices\Santander.SQL.IServices.csproj">
-      <Project>{3a297861-002d-48ab-9ca7-b6524d309470}</Project>
+      <Project>{3A297861-002D-48AB-9CA7-B6524D309470}</Project>
       <Name>Santander.SQL.IServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\Santander.SQL.Models\Santander.SQL.Models.csproj">
       <Project>{1833eb50-b606-4927-b780-bf559f87aadb}</Project>
       <Name>Santander.SQL.Models</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DesignerModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DesignerModel.edmx</DependentUpon>
+      <LastGenOutput>DesignerModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="DesignerModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DesignerModel.edmx</DependentUpon>
+      <LastGenOutput>DesignerModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

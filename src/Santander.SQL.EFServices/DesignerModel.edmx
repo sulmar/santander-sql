@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="AdventureWorksModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AccountOperations">
+          <Key>
+            <PropertyRef Name="AccountOperationId" />
+          </Key>
+          <Property Name="AccountOperationId" Type="int" Nullable="false" />
+          <Property Name="Account" Type="varchar" MaxLength="9" Nullable="false" />
+          <Property Name="OperationDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="OperationTypeId" Type="int" Nullable="false" />
+          <Property Name="OperationStatus" Type="char" MaxLength="2" />
+        </EntityType>
+        <EntityType Name="OperationTypes">
+          <Key>
+            <PropertyRef Name="OperationTypeId" />
+          </Key>
+          <Property Name="OperationTypeId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <Association Name="FK_AccountOperations_OperationTypes">
+          <End Role="OperationTypes" Type="Self.OperationTypes" Multiplicity="1" />
+          <End Role="AccountOperations" Type="Self.AccountOperations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OperationTypes">
+              <PropertyRef Name="OperationTypeId" />
+            </Principal>
+            <Dependent Role="AccountOperations">
+              <PropertyRef Name="OperationTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AdventureWorksModelStoreContainer">
+          <EntitySet Name="AccountOperations" EntityType="Self.AccountOperations" Schema="Santander" store:Type="Tables" />
+          <EntitySet Name="OperationTypes" EntityType="Self.OperationTypes" Schema="Santander" store:Type="Tables" />
+          <AssociationSet Name="FK_AccountOperations_OperationTypes" Association="Self.FK_AccountOperations_OperationTypes">
+            <End Role="OperationTypes" EntitySet="OperationTypes" />
+            <End Role="AccountOperations" EntitySet="AccountOperations" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AdventureWorksModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AccountOperations">
+          <Key>
+            <PropertyRef Name="AccountOperationId" />
+          </Key>
+          <Property Name="AccountOperationId" Type="Int32" Nullable="false" />
+          <Property Name="Account" Type="String" MaxLength="9" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="OperationDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="OperationTypeId" Type="Int32" Nullable="false" />
+          <Property Name="OperationStatus" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="OperationTypes" Relationship="Self.FK_AccountOperations_OperationTypes" FromRole="AccountOperations" ToRole="OperationTypes" />
+        </EntityType>
+        <EntityType Name="OperationTypes">
+          <Key>
+            <PropertyRef Name="OperationTypeId" />
+          </Key>
+          <Property Name="OperationTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AccountOperations" Relationship="Self.FK_AccountOperations_OperationTypes" FromRole="OperationTypes" ToRole="AccountOperations" />
+        </EntityType>
+        <Association Name="FK_AccountOperations_OperationTypes">
+          <End Role="OperationTypes" Type="Self.OperationTypes" Multiplicity="1" />
+          <End Role="AccountOperations" Type="Self.AccountOperations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OperationTypes">
+              <PropertyRef Name="OperationTypeId" />
+            </Principal>
+            <Dependent Role="AccountOperations">
+              <PropertyRef Name="OperationTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="AdventureWorksEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AccountOperations" EntityType="Self.AccountOperations" />
+          <EntitySet Name="OperationTypes" EntityType="Self.OperationTypes" />
+          <AssociationSet Name="FK_AccountOperations_OperationTypes" Association="Self.FK_AccountOperations_OperationTypes">
+            <End Role="OperationTypes" EntitySet="OperationTypes" />
+            <End Role="AccountOperations" EntitySet="AccountOperations" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AdventureWorksModelStoreContainer" CdmEntityContainer="AdventureWorksEntities">
+          <EntitySetMapping Name="AccountOperations">
+            <EntityTypeMapping TypeName="AdventureWorksModel.AccountOperations">
+              <MappingFragment StoreEntitySet="AccountOperations">
+                <ScalarProperty Name="AccountOperationId" ColumnName="AccountOperationId" />
+                <ScalarProperty Name="Account" ColumnName="Account" />
+                <ScalarProperty Name="OperationDate" ColumnName="OperationDate" />
+                <ScalarProperty Name="OperationTypeId" ColumnName="OperationTypeId" />
+                <ScalarProperty Name="OperationStatus" ColumnName="OperationStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OperationTypes">
+            <EntityTypeMapping TypeName="AdventureWorksModel.OperationTypes">
+              <MappingFragment StoreEntitySet="OperationTypes">
+                <ScalarProperty Name="OperationTypeId" ColumnName="OperationTypeId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
