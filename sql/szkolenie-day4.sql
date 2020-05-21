@@ -473,7 +473,6 @@ go
 	
 select * from [Santander].[Stores] 
 
-
 -- Pobranie wartoœci 
 
   SELECT 
@@ -492,6 +491,7 @@ OPENJSON([Santander].[Stores].jsonlocation, 'lax $.location')
 		lat float '$.geo.latitude'
 	)  
      AS location
+
 
 
 
