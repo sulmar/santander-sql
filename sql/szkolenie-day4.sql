@@ -42,15 +42,9 @@ if @ret <> 0 RAISERROR('Unable to open HTTP connection', 10, 1);
 print @ret
 
 
+insert into @response (content) EXEC sp_OAGetProperty @token, 'responseText'
 
-
-
-
-
- 
-
-
-
+select content from @response
 
 
 
