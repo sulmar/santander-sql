@@ -425,10 +425,73 @@ go
   select @xml
 
 
+  --  Powi¹zanie danych relacyjnych i JSON
+
+  go
+
+  -- Utworzenie tabeli z kolumn¹ w formacie JSON
+
+   create table [Santander].[Stores] (
+	storeId int primary key identity,
+	title nvarchar(100) not null,
+	jsonlocation nvarchar(max)
+  )
+  
 
 
 
+  -- Dodanie regu³y, która weryfikuje zgodnoœæ z formatem JSON
 
+  alter table [Santander].[Stores]
+	add constraint [location_json_formatted]
+		check (ISJSON(jsonlocation)=1)
+
+-- Dodanie przyk³adowych danych
+
+  insert into [Santander].[Stores] 
+	values
+		('Store 1', '{"location": {"postcode": "00-123", "street":"Dworcowa", "geo":{ "longitude": 52.12, "latitude": 28.64 } } }'),
+		('Store 2', '{"location": {"postcode": "99-033", "street":"Komputerowa", "geo":{ "longitude": 52.82, "latitude": 27.54 } } }'),
+		('Store 3', '{"location": {"postcode": "85-100", "street":"Piekna", "geo":{ "longitude": 52.32, "latitude": 27.03 } } }')
+
+		select * from [Santander].[Stores] 
+		
+  select * from  [Santander].[Stores]
+  where JSON_VALUE(jsonlocation, '$.location.street') = 'Dworcowa'
+
+  go
+
+  drop  table [Santander].[Stores]
+
+  create table [Santander].[Stores] (
+	storeId int primary key identity,
+	title nvarchar(100) not null,
+	jsonlocation nvarchar(max),
+	ulica as json_value(jsonlocation, '$.location.street'),  -- calculated column
+	index ix_ulica(ulica)  -- dodatkowo tworzymy index na kolumnie ulica
+  )
+	
+select * from [Santander].[Stores] 
+
+
+-- Pobranie wartoœci 
+
+  SELECT 
+	title,
+	location.street, 
+	location.postcode,
+	location.lat, 
+	location.lon  
+FROM  [Santander].[Stores]   
+CROSS APPLY 
+OPENJSON([Santander].[Stores].jsonlocation, 'lax $.location')   
+     WITH (
+		street varchar(500),  
+		postcode  varchar(500) '$.postcode' ,  
+		lon float '$.geo.longitude', 
+		lat float '$.geo.latitude'
+	)  
+     AS location
 
 
 
