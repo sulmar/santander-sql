@@ -35,7 +35,7 @@ namespace Santander.SQL.EFServices
 
         public OperationType Get(int id)
         {
-           // context.Database.SqlQuery<OperationType>()
+            // context.Database.SqlQuery<OperationType>()
 
             return context.OperationTypes.Find(id);
         }
@@ -77,6 +77,28 @@ namespace Santander.SQL.EFServices
             context.SaveChanges();
         }
 
+        public void Block(AccountOperation accountOperation)
+        {
+            using (DbContextTransaction transaction = context.Database.BeginTransaction())
+            {
+
+                try
+                {
+                    accountOperation.OperationStatus = OperationStatus.EX;
+                    context.SaveChanges();
+
+                    context.OperationTypes.Add(new OperationType { Name = "Test" });
+                    context.SaveChanges();
+
+                    transaction.Commit();
+                }
+                catch(Exception e)
+                {
+                    transaction.Rollback();
+                }
+            }
+        }
+
         public void AddRange(IEnumerable<AccountOperation> accountOperations)
         {
             context.Configuration.AutoDetectChangesEnabled = false;
@@ -106,7 +128,7 @@ namespace Santander.SQL.EFServices
 
             foreach (var entity in entities)
             {
-               // entity.
+                // entity.
             }
 
             context.SaveChanges();
