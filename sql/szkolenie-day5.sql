@@ -569,9 +569,10 @@ go
 create assembly CLRStoredProcedures
 FROM 'C:\temp\santander\Santander.SQL.CLRStoredProcedures.dll'
 
-
+drop assembly CLRStoredProcedures
 -- 4. Rejestracja procedury
 go
+drop procedure usp_HelloWorld
 
 create procedure usp_HelloWorld
 AS 
@@ -585,6 +586,25 @@ EXTERNAL NAME CLRStoredProcedures.[Santander.SQL.CLRStoredProcedures.StoredProce
 exec usp_HelloWorld
 
 GO
+
+
+-- Wywo³anie funkcji CLR
+
+CREATE FUNCTION [dbo].[http] (@url [nvarchar](MAX))
+RETURNS [nvarchar](MAX)
+AS EXTERNAL NAME CLRStoredProcedures.[Santander.SQL.CLRStoredProcedures.UserDefinedFunctions].http;
+
+
+declare @url nvarchar(max)
+SET @url = 'https://api.nbp.pl/api/exchangerates/tables/a/'
+
+DECLARE @response NVARCHAR(MAX)
+
+select @response = [dbo].[http](@url)
+
+select @response
+
+
 
 
 -- Debugowanie procedur sk³adowanych
