@@ -67,6 +67,35 @@ namespace Santander.SQL.EFServices
             this.context = context;
         }
 
+        public void UpdateBatch(IEnumerable<AccountOperation> accountOperations)
+        {
+            foreach (var accountOperation in accountOperations)
+            {
+                accountOperation.OperationStatus = OperationStatus.OK;
+            }
+
+            context.SaveChanges();
+        }
+
+        public void AddRange(IEnumerable<AccountOperation> accountOperations)
+        {
+            context.Configuration.AutoDetectChangesEnabled = false;
+
+            try
+            {
+                foreach (var accountOperation in accountOperations)
+                {
+                    context.AccountOperations.Add(accountOperation);
+                }
+
+                context.SaveChanges();
+            }
+            finally
+            {
+                context.Configuration.AutoDetectChangesEnabled = true;
+            }
+        }
+
         public void Add(AccountOperation accountOperation)
         {
             context.AccountOperations.Add(accountOperation);

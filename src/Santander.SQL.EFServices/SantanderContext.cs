@@ -13,6 +13,8 @@ namespace Santander.SQL.EFServices
         public SantanderContext(string connectionString) : base(connectionString)
         {
             Database.SetInitializer<SantanderContext>(null);
+
+            this.Configuration.AutoDetectChangesEnabled = false;
         }
 
         public DbSet<AccountOperation> AccountOperations { get; set; }
@@ -28,6 +30,38 @@ namespace Santander.SQL.EFServices
             modelBuilder.Entity<OperationType>().Property(p => p.Id).HasColumnName("OperationTypeId");
 
             base.OnModelCreating(modelBuilder);
+        }
+
+        public override int SaveChanges()
+        {
+
+            // Audit
+            var modifiedEntities = ChangeTracker.Entries().Where(p => p.State == EntityState.Modified);
+
+            foreach (var entity in modifiedEntities)
+            {
+                var entityName = entity.Entity.GetType().Name;
+
+                foreach (var prop in entity.OriginalValues.PropertyNames)
+                {
+                    var originalValue = entity.OriginalValues[prop];
+                    var currentValue = entity.CurrentValues[prop];
+
+                    if (originalValue != currentValue)
+                    {
+                        Console.WriteLine($"Entity {entityName} property {prop} has changed {originalValue} -> {currentValue}");
+
+                    }
+
+                }
+            }
+
+            var accountOperationEntities = ChangeTracker.Entries<AccountOperation>().Select(p=>p.Entity).ToList();
+
+            
+
+
+            return base.SaveChanges();
         }
 
 
